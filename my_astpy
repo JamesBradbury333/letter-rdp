@@ -1,0 +1,48 @@
+from typing import Union, List
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+
+
+NodeType = Union[
+    "Program",
+    "NumericLiteral",
+    "Identifier",
+    "BinaryExpr",
+]
+
+# Statements will not return a value: Let x = 45
+# Assignment expressions will return values: x = 45
+@dataclass
+class Statement:
+    @property
+    @abstractmethod
+    def kind() -> NodeType:
+        pass
+
+
+@dataclass
+class Program(Statement):
+    kind: "Program"
+    body: List[Statement]
+
+@dataclass
+class Expression(Statement):
+    pass
+
+@dataclass
+class BinaryExpr(Expression):
+    kind: "BinaryExpr"
+    left: Expression
+    right: Expression
+    operator: str
+
+@dataclass
+class Identifier(Expression):
+    kind: "Identifier"
+    symbol: str
+
+
+@dataclass
+class NumericLiteral(Expression):
+    kind: "NumericLiteral"
+    value: int
